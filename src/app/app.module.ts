@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
-import * as D3 from 'd3';
+import { InterceptorService } from './shared/interceptor.service';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import * as D3 from 'd3';
     FormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,23 +1,22 @@
 <div class="row my-4">
     <h1 class="h2">Overview</h1>
-    <div class="col-6 my-3">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-3 d-flex align-items-stretch">
         <div class="card w-100">
-            <div class="card-header">
+            <div class="card-header" #pieChart>
                 <h5 class="card-title">Pie Chart</h5>
             </div>
             <div class="card-body">
-                <!-- <app-pie-cahrt></app-pie-cahrt> -->
-                <figure id="pie"></figure>
+                <app-pie-chart></app-pie-chart>
             </div>
         </div>
     </div>
-    <div class="col-6 my-3">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-3 d-flex align-items-stretch">
         <div class="card w-100">
-            <div class="card-header">
+            <div class="card-header" #barChart>
                 <h5 class="card-title">Bar Chart</h5>
             </div>
             <div class="card-body">
-                <figure id="bar"></figure>
+                <app-bar-chart></app-bar-chart>
             </div>
         </div>
     </div>
@@ -27,51 +26,19 @@
     <h1 class="h2">User List</h1>
     <div class="col-12">
         <div class="table-responsive">
-            <table class="table border table-striped">
-                <thead>
+            <table class="table table-striped">
+                <thead class="bg-dark text-white">
                     <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Header</th>
-                    <th scope="col">Header</th>
-                    <th scope="col">Header</th>
-                    <th scope="col">Header</th>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>Username</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>random</td>
-                        <td>data</td>
-                        <td>placeholder</td>
-                        <td>text</td>
-                    </tr>
-                    <tr>
-                        <td>1,002</td>
-                        <td>placeholder</td>
-                        <td>irrelevant</td>
-                        <td>visual</td>
-                        <td>layout</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>data</td>
-                        <td>rich</td>
-                        <td>dashboard</td>
-                        <td>tabular</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>information</td>
-                        <td>placeholder</td>
-                        <td>illustrative</td>
-                        <td>data</td>
-                    </tr>
-                    <tr>
-                        <td>1,004</td>
-                        <td>text</td>
-                        <td>random</td>
-                        <td>layout</td>
-                        <td>dashboard</td>
+                    <tr *ngFor="let row of userData">
+                        <td>{{ row.firstName }}</td>
+                        <td>{{ row.lastName }}</td>
+                        <td>{{ row.username }}</td>
                     </tr>
                 </tbody>
             </table>
