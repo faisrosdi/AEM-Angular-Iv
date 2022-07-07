@@ -14,14 +14,18 @@ export class DashboardComponent implements OnInit {
   private token = this.userServices.getToken();
 
   ngOnInit(): void {
-    this.userServices.getData(JSON.stringify(this.token)).subscribe(
-      res => {},
-      err => {
-        if(err.statusText = 'Unauthorized') {
-          this.router.navigateByUrl('login');
-        }
-      }
-    )
+    // this.userServices.getData(JSON.stringify(this.token)).subscribe(
+    //   res => {},
+    //   err => {
+    //     if(err.statusText = 'Unauthorized') {
+    //       this.router.navigateByUrl('login');
+    //     }
+    //   }
+    // )
+
+    console.log(this.userServices.getUserPayload());
+    // console.log(this.userServices.checkToken(JSON.stringify(this.token)));
+    
   }
 
   signOut() {

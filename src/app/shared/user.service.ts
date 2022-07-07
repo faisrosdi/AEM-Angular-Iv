@@ -31,8 +31,24 @@ export class UserService {
     localStorage.removeItem('token');
   }
 
-  checkToken(token: string) {
+  getUserPayload() {
+    var token = this.getToken();
+    if (token) {
+      var userPayload = atob(token.split('.')[1]);
+      return JSON.parse(userPayload);
+    } else {
+      return null;
+    }
+  }
 
+  // check login valid or not
+  isLoggedIn() {
+    var userPayload = this.getUserPayload();
+    if (userPayload) {
+      return userPayload.exp > Date.now() / 1000;
+    } else {
+      return false;
+    }
   }
   
   getData (token: string): Observable<any> {

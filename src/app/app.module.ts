@@ -11,6 +11,9 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { InterceptorService } from './shared/interceptor.service';
+import { AuthGuard } from './shared/auth.guard';
+import { UserService } from './shared/user.service';
+
 
 
 @NgModule({
@@ -28,7 +31,14 @@ import { InterceptorService } from './shared/interceptor.service';
     FormsModule,
     HttpClientModule,
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true,
+
+    }, AuthGuard, UserService],
   bootstrap: [AppComponent]
+  
 })
 export class AppModule { }
