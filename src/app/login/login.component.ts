@@ -21,9 +21,7 @@ export class LoginComponent implements OnInit {
   constructor(private http: HttpClient,private userServices: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    // if(!this.userServices.getToken()) {
-    //   this.router.navigateByUrl('dashboard');
-    // }
+    
   }
 
   onSubmit(userLogin: NgForm) {

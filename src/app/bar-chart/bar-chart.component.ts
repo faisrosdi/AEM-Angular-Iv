@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { UserService } from '../shared/user.service';
 import * as d3 from 'd3';
 
@@ -17,8 +17,15 @@ export class BarChartComponent implements OnInit {
   private height = 400 - (this.margin * 2);
 
   private token = this.userServices.getToken();
+  public innerWidth: any;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.innerWidth = window.innerWidth;
+  }
 
   ngOnInit(): void {
+    this.sizeSvg(window.innerWidth)
     this.userServices.getData(JSON.stringify(this.token)).subscribe(
       res => {
         this.barChartData = res.chartBar;
@@ -36,41 +43,59 @@ export class BarChartComponent implements OnInit {
     .attr("height", this.height + (this.margin * 2))
     .append("g")
     .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
-}
+  }
 
-private drawBars(data: any[]): void {
-    // Create the X-axis band scale
-    const x = d3.scaleBand()
-    .range([0, this.width])
-    .domain(data.map(d => d.name))
-    .padding(0.2);
+  private drawBars(data: any[]): void {
+      // Create the X-axis band scale
+      const x = d3.scaleBand()
+      .range([0, this.width])
+      .domain(data.map(d => d.name))
+      .padding(0.2);
 
-    // Draw the X-axis on the DOM
-    this.svg.append("g")
-    .attr("transform", "translate(0," + this.height + ")")
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "translate(0,10)");
+      // Draw the X-axis on the DOM
+      this.svg.append("g")
+      .attr("transform", "translate(0," + this.height + ")")
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("transform", "translate(0,10)");
 
-    // Create the Y-axis band scale
-    const y = d3.scaleLinear()
-    .domain([0, 100])
-    .range([this.height, 0]);
+      // Create the Y-axis band scale
+      const y = d3.scaleLinear()
+      .domain([0, 100])
+      .range([this.height, 0]);
 
-    // Draw the Y-axis on the DOM
-    this.svg.append("g")
-    .call(d3.axisLeft(y));
+      // Draw the Y-axis on the DOM
+      this.svg.append("g")
+      .call(d3.axisLeft(y));
 
-    // Create and fill the bars
-    this.svg.selectAll("bars")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", (d: { name: string; }) => x(d.name))
-    .attr("y", (d: { value: d3.NumberValue; }) => y(d.value))
-    .attr("width", x.bandwidth())
-    .attr("height", (d: { value: d3.NumberValue; }) => this.height - y(d.value))
-    .attr("fill", "#d04a35")
-}
+      // Create and fill the bars
+      this.svg.selectAll("bars")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", (d: { name: string; }) => x(d.name))
+      .attr("y", (d: { value: d3.NumberValue; }) => y(d.value))
+      .attr("width", x.bandwidth())
+      .attr("height", (d: { value: d3.NumberValue; }) => this.height - y(d.value))
+      .attr("fill", "#d04a35")
+  }
+
+  private sizeSvg(w: any):void {
+    if(w < 550) {
+      this.margin = 10;
+      this.width = 300;
+      this.height = 300;
+      console.log('kecik')
+    } else if(w <= 900) {
+      console.log('sedang')
+      this.width = 400;
+      this.height = 200;
+    } else {
+      console.log('besar')
+      this.margin = 50;
+      this.width = 600;
+      this.height = 400;
+    }
+  }
 
 }

@@ -8,11 +8,21 @@
                     <label for="floatingInput">Email</label>
                     <input #username="ngModel" [(ngModel)]="model.username" name="username" class="form-control"
                     placeholder="Ex. demo@example.com" type="email" required>
+                    <div *ngIf="username.invalid && (username.dirty || username.touched)">
+                        <small *ngIf="username.errors?.['required']" class="text-danger">
+                            Email is required.
+                        </small>
+                    </div>
                 </div>
                 <div class="form-group my-2">
                     <label for="floatingInput">Password</label>
                     <input #password="ngModel" [(ngModel)]="model.password" name="password" class="form-control"
                     type="password" required>
+                    <div *ngIf="password.invalid && (password.dirty || password.touched)">
+                        <small *ngIf="password.errors?.['required']" class="text-danger">
+                            Password is required.
+                        </small>
+                    </div>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
             </form>

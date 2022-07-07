@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { UserService } from '../shared/user.service';
 import * as d3 from 'd3';
 
@@ -9,7 +9,7 @@ import * as d3 from 'd3';
 })
 export class PieChartComponent implements OnInit {
 
-  constructor( private userServices: UserService) { }
+  constructor(private userServices: UserService) { }
 
   private pieChartData = [];
   private svg: any;
@@ -19,11 +19,21 @@ export class PieChartComponent implements OnInit {
   private radius = Math.min(this.width_pie, this.height_pie) / 2 - this.margin_pie;
   private colors: any;
   private token = this.userServices.getToken();
-  
+  public innerWidth: any;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.innerWidth = window.innerWidth;
+  }
 
   
 
   ngOnInit(): void {
+    this.sizeSvg(window.innerWidth);
+
+
+
+
     this.userServices.getData(JSON.stringify(this.token)).subscribe(
       res => {
         this.pieChartData = res.chartDonut;
@@ -45,50 +55,64 @@ export class PieChartComponent implements OnInit {
       "transform",
       "translate(" + this.width_pie / 2 + "," + this.height_pie / 2 + ")"
     );
-}
+  }
 
-private createColors(data: any[]): void {
-    this.colors = d3.scaleOrdinal()
-    .domain(data.map(d => d.value.toString()))
-    .range(["#c7d3ec", "#a5b8db", "#879cc4", "#677795", "#5a6782"]);
-}
+  private createColors(data: any[]): void {
+      this.colors = d3.scaleOrdinal()
+      .domain(data.map(d => d.value.toString()))
+      .range(["#c7d3ec", "#a5b8db", "#879cc4", "#677795", "#5a6782"]);
+  }
 
-private drawChart(): void {
-    // Compute the position of each group on the pie:
-    const pie = d3.pie<any>().value((d: any) => Number(d.value));
+  private drawChart(): void {
+      // Compute the position of each group on the pie:
+      const pie = d3.pie<any>().value((d: any) => Number(d.value));
 
-    // Build the pie chart
-    this.svg
-    .selectAll('pieces')
-    .data(pie(this.pieChartData))
-    .enter()
-    .append('path')
-    .attr('d', d3.arc()
-      .innerRadius(80)
-      .outerRadius(this.radius)
-    )
-    .attr('fill', (d: any, i: any) => (this.colors(i)))
-    .style("stroke-width", "1px");
+      // Build the pie chart
+      this.svg
+      .selectAll('pieces')
+      .data(pie(this.pieChartData))
+      .enter()
+      .append('path')
+      .attr('d', d3.arc()
+        .innerRadius(80)
+        .outerRadius(this.radius)
+      )
+      .attr('fill', (d: any, i: any) => (this.colors(i)))
+      .style("stroke-width", "1px");
 
-    // Add labels
-    const labelLocation = d3.arc()
-    .innerRadius(100)
-    .outerRadius(this.radius);
+      // Add labels
+      const labelLocation = d3.arc()
+      .innerRadius(100)
+      .outerRadius(this.radius);
 
-    this.svg
-    .selectAll('pieces')
-    .data(pie(this.pieChartData))
-    .enter()
-    .append('text')
-    .text((d: { data: { name: any; }; }) => d.data.name)
-    // .attr("transform", (d: d3.DefaultArcObject) => "translate(" + labelLocation.centroid(d) + ")")
-    .attr("transform", (d: d3.DefaultArcObject) => "translate(" + labelLocation.centroid(d) + ")")
-    .style("text-anchor", "middle")
-    .style("font-size", 15);
-}
+      this.svg
+      .selectAll('pieces')
+      .data(pie(this.pieChartData))
+      .enter()
+      .append('text')
+      .text((d: { data: { name: any; }; }) => d.data.name)
+      // .attr("transform", (d: d3.DefaultArcObject) => "translate(" + labelLocation.centroid(d) + ")")
+      .attr("transform", (d: d3.DefaultArcObject) => "translate(" + labelLocation.centroid(d) + ")")
+      .style("text-anchor", "middle")
+      .style("font-size", 15);
+  }
 
-  
-
-
+  private sizeSvg(w: any):void {
+    if(w < 550) {
+      this.margin_pie = 10;
+      this.width_pie = 300;
+      this.height_pie = 400;
+      console.log('kecik')
+    } else if(w <= 900) {
+      console.log('sedang')
+      this.width_pie = 400;
+      this.height_pie = 200;
+    } else {
+      console.log('besar')
+      this.margin_pie = 50;
+      this.width_pie = 600;
+      this.height_pie = 400;
+    }
+  }
 
 }

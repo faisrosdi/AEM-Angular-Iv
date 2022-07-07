@@ -1,1 +1,20 @@
+$small: 300px;
+$medium: 900px;
+$large: 1100px;
   
+  
+  svg {
+    @media screen and (max-width: $large) {
+      width: 100 !important;
+      height: 100 !important;
+    }
+    @media screen and (min-width: $medium) {
+      width: 100 !important;
+      height: 100 !important;
+    }
+    @media screen and (max-width: $small) {
+      width: 100 !important;
+      height: 100 !important;
+    }
+    
+  }
